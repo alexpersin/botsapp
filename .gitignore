@@ -1,0 +1,4 @@
+allowed_phone_numbers.txt
+nexmo_config.sh
+
+*.pyc
