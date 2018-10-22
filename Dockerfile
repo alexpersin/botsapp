@@ -9,4 +9,4 @@ RUN pip3 install -U -r /app/adapters/slack/requirements.txt
 
 EXPOSE 3000
 
-CMD ["python3", "run.py"]
+CMD ["python", "run.py"]
