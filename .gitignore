@@ -1,4 +1,6 @@
 allowed_phone_numbers.txt
+slack_config.sh
+nexmo-config.sh
 
 *.pyc
 
