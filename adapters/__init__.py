@@ -1,11 +1,13 @@
-class Platform(object):
-    """ Base class for all platform integrations. """
+from core import Message
+
+class Adapter(object):
+    """ Base class for all adapters. """
     def __init__(self):
         pass
     
     def send(message: Message):
-        """ Adds any platform specific information to the argument message
-            object then send it. """
+        """ This will be called by botsapp. It should add any adapter specific
+        information to the argument message object then send it. """
         raise NotImplementedError()
 
     def add_handler(handler):
