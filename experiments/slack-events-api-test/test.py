@@ -4,16 +4,15 @@ from get_functions import *
 import os
 import re
 
-VERBOSE = False
-
+VERBOSE = True
 
 # Our app's Slack Event Adapter for receiving actions via the Events API
-SLACK_VERIFICATION_TOKEN = os.environ["SLACK_VERIFICATION_TOKEN"]
-slack_events_adapter = SlackEventAdapter(SLACK_VERIFICATION_TOKEN, "/slack/events")
+slack_signing_secret = os.environ["SLACK_SIGNING_SECRET"]
+slack_events_adapter = SlackEventAdapter(slack_signing_secret, "/slack/events")
 
 # Create a SlackClient for your bot to use for Web API requests
-SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
-CLIENT = SlackClient(SLACK_BOT_TOKEN)
+slack_bot_token = os.environ["SLACK_BOT_TOKEN"]
+slack_client = SlackClient(slack_bot_token)
 
 
 
@@ -28,7 +27,7 @@ def handle_message(event_data):
     if message.get("subtype") is None and "hi " in message.get('text'):
         channel = message["channel"]
         message = "Hello <@%s>! :tada:" % message["user"]
-        CLIENT.api_call("chat.postMessage", channel=channel, text=message)
+        slack_client.api_call("chat.postMessage", channel=channel, text=message)
 
 
 # Echo any slack reaction
@@ -38,16 +37,21 @@ def reaction_added(event_data):
     emoji = event["reaction"]
     channel = event["item"]["channel"]
     text = ":%s:" % emoji
-    CLIENT.api_call("chat.postMessage", channel=channel, text=text)
+    slack_client.api_call("chat.postMessage", channel=channel, text=text)
 
 
-
-# Checks if the bot has been mentioned in chat
+@slack_events_adapter.on("message")
+def call_everyone_a_cunt(event_data):
+    message = get_message(event_data)
+    channel = get_channel(message)
+    if bot_mentioned(event_data):
+        slack_client.api_call("chat.postMessage", channel=channel, text="You are all cunts")
+# C@hecks if the bot has been mentioned in chat
 def bot_mentioned(event_data):
     message = event_data["event"]
     channel = message["channel"]
-    if message.get("subtype") is None and get_user_id(CLIENT) in message.get("text"):
-        CLIENT.api_call("chat.postMessage", channel=channel, text="Stop talking about me.")
+    if message.get("subtype") is None and get_user_id(slack_client) in message.get("text"):
+        slack_client.api_call("chat.postMessage", channel=channel, text="Stop talking about me.")
         return True
 
 # Listens to chat for a given phrase
@@ -56,8 +60,6 @@ def listen_for_phrase(event_data, phrase):
     channel = get_channel(message)
     if message.get("subtype") is None and phrase in message.get("text"):
         return True
-
-
 
 # Configure to port of Flask server or I am using ngrok
 
