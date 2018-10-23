@@ -19,6 +19,7 @@ class Message():
 
 class Bot():
     def __init__(self):
+        print("creating bot")
         self.adapters = self.get_adapters()
         self.add_handlers()
     
