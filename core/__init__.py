@@ -11,10 +11,10 @@ class Message():
     def __str__(self):
         return '''Message:
         From: %s
-        Content: %s ''' % (self.message_sender, self.message_content)
+        Content: %s ''' % (self.sender, self.body)
 
     def __repr__(self):
-        return 'Message(From: %s, Content: %s)' % (self.message_sender, self.message_content)
+        return 'Message(From: %s, Content: %s)' % (self.sender, self.body)
 
 
 class Bot():
