@@ -50,6 +50,6 @@ class SlackAdapter(Adapter):
     def __repr__(self):
         return "SlackAdapter(port: %i )" % (self.port)
 
-    def run(self, port=3000):
+    def run(self, port=3000, host='0.0.0.0'):
         self.port = port
-        self.events_adapter.start(port=port)
+        self.events_adapter.start(port=port, host=host)
