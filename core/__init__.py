@@ -54,4 +54,4 @@ class Bot():
             loop.run_forever()
         except KeyboardInterrupt:
             print("Stopping Botsapp.")
-        
+
